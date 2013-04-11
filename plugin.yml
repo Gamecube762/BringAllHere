@@ -1,0 +1,12 @@
+name: BringAllHere
+main: com.github.Gamecube762.BAH.Main
+author: Gamecube762
+version: 1
+prefix: BAH
+commands:
+   BringAllHere:
+      description: Teleports everyone to you.
+      usage: /<command>
+   BringAllTo:
+      description: Teleports everyone to who you choose.
+      usage: /<command> [player]
