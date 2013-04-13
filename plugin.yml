@@ -1,15 +1,29 @@
 name: BringAllHere
 main: com.github.Gamecube762.BAH.Main
 author: Gamecube762
-version: 1.1
+version: 1.2
 prefix: BAH
 commands:
    BringAllHere:
       description: Teleports everyone to you.
       usage: /<command>
+      permission: bah.command.bringallhere
    BringAllTo:
       description: Teleports everyone to who you choose.
       usage: /<command> [player]
+      permission: bah.command.bringallto
+   BringMeBack:
+      description: Teleports you to where you once were.
+      usage: /<command>
+      permission: bah.command.bringmeback
+   PutEveryoneBack:
+      description: Teleports everyone to where they once were.
+      usage: /<command>
+      permission: bah.command.puteveryoneback
+   PutAllBack:
+      description: Teleports everyone to where they once were.
+      usage: /<command>
+      permission: bah.command.puteveryoneback
 permissions:
    bah.command.*:
       description: Access to all BringAllHere commands
@@ -17,11 +31,16 @@ permissions:
       children:
          bah.command.bringallhere: true
          bah.command.bringallto: true
+         bah.command.puteveryoneback: true
+         bah.command.bringmeback: true
    bah.command.bringallhere:
       description: Access to the BringAllHere command
       default: OP
    bah.command.bringallto:
       description: Access to the BringAllTo command
+      default: OP
+   bah.command.bringmeback:
+      description: Access to the BringMeback command
       default: OP
    bah.teleport.exempt:
       description: people with this perm dousnt get teleported
