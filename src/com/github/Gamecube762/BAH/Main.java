@@ -1,5 +1,7 @@
 package com.github.Gamecube762.BAH;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -10,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin{
 	
+
 	@Override
 	public void onEnable() {
 		getLogger().info("it worked! =D");
@@ -20,8 +23,12 @@ public class Main extends JavaPlugin{
 		getLogger().info("Goodbye! D=");	
 	}
 
+	HashMap<Player, Location> BeforeMassTele = new HashMap<Player, Location>();
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String labal, String[] args) {
+		String cmdName = cmd.getName();
+		String cmdPerm = cmd.getPermission();
 		int PlayersOnline = Bukkit.getServer().getOnlinePlayers().length;
 		Player s = Bukkit.getServer().getPlayer(sender.getName());
 		
@@ -30,13 +37,14 @@ public class Main extends JavaPlugin{
 			
 			
 		
-		if(cmd.getName().equalsIgnoreCase("bringallhere")|cmd.getName().equalsIgnoreCase("bah")){
-			if (s.hasPermission("bah.command.bringallto")|s.hasPermission("bah.command.*")) {
+		if(cmdName.equalsIgnoreCase("bringallhere")|cmdName.equalsIgnoreCase("bah")){
+			if (s.hasPermission(cmdPerm)) {
 				
 				if (PlayersOnline <= 1){s.sendMessage(ChatColor.RED + "No one is online to teleport to you ='(");return true;}
 				
 				for(Player p: Bukkit.getServer().getOnlinePlayers()){
 					if (!(p.hasPermission("bah.teleport.exempt")))
+						BeforeMassTele.put(p, p.getLocation());
 						p.teleport(sLoc);
 						p.sendMessage(ChatColor.GOLD + "Teleported all to " + s.getName());
 				}
@@ -49,8 +57,8 @@ public class Main extends JavaPlugin{
 				s.sendMessage(ChatColor.RED + "You don't have permission!");
 				return true;
 		}
-		} else if(cmd.getName().equalsIgnoreCase("bringallto")|cmd.getName().equalsIgnoreCase("bah")){
-			if (s.hasPermission("bah.command.bringallto")|s.hasPermission("bah.command.*")) {
+		} else if(cmdName.equalsIgnoreCase("bringallto")|cmdName.equalsIgnoreCase("bah")){
+			if (s.hasPermission(cmdPerm)) {
 				
 				if (!(args.length > 0)) {s.sendMessage(ChatColor.RED + "Needs a Player to teleport to!"); return true;}
 				Player Target = Bukkit.getServer().getPlayer(args[0]);
@@ -60,6 +68,7 @@ public class Main extends JavaPlugin{
 					
 						for(Player p: Bukkit.getServer().getOnlinePlayers()){
 							if(!(p.hasPermission("bah.teleport.exempt"))){
+								BeforeMassTele.put(p, p.getLocation());
 								p.teleport(tLoc);
 								p.sendMessage(ChatColor.GOLD+"Teleported everyone to "+Target.getName());}
 						}
@@ -78,6 +87,30 @@ public class Main extends JavaPlugin{
 			} else {
 				s.sendMessage(ChatColor.RED + "You don't have permission!");
 					return true;
+			}
+		} else if (cmdName.equalsIgnoreCase("bringmeback")|cmdName.equalsIgnoreCase("bab")) {
+			if (s.hasPermission(cmdPerm)){
+				if (BeforeMassTele.get(s)==null) {
+					s.sendMessage("You were in no recent mass teleports!");
+				} else {
+					s.teleport(BeforeMassTele.get(s));
+					BeforeMassTele.put(s, null);
+					s.sendMessage(ChatColor.GOLD + "");
+				}
+			}else {
+				s.sendMessage(ChatColor.RED + "You don't have permission!");
+					return true;
+			}
+		} else if (cmdName.equalsIgnoreCase("puteveryoneback")|cmdName.equalsIgnoreCase("putallback")|cmdName.equalsIgnoreCase("peb")|cmdName.equalsIgnoreCase("pab")) {
+			if (s.hasPermission(cmdPerm)){
+				for(Player p: Bukkit.getServer().getOnlinePlayers()) {
+					if (BeforeMassTele.get(p)!=null) {
+						p.teleport(BeforeMassTele.get(p));
+						BeforeMassTele.put(p, null);
+						p.sendMessage(ChatColor.GOLD + "You were teleported back!");
+					}
+					s.sendMessage(ChatColor.GOLD + "Teleported everyone back");
+				}
 			}
 		}
 		return true;
