@@ -90,7 +90,7 @@ public class Main extends JavaPlugin{
 				} else {
 					s.teleport(BeforeMassTele.get(s));
 					BeforeMassTele.put(s, null);
-					s.sendMessage(ChatColor.GOLD + "");
+					s.sendMessage(ChatColor.GOLD + "You were teleported back!");
 				}
 		} else if (cmdName.equalsIgnoreCase("puteveryoneback")|cmdName.equalsIgnoreCase("putallback")|cmdName.equalsIgnoreCase("peb")|cmdName.equalsIgnoreCase("pab")) {
 			if (!(s.hasPermission(cmdPerm))) {s.sendMessage(ChatColor.RED + "You don't have permission!");return true;}
