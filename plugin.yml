@@ -1,7 +1,7 @@
 name: BringAllHere
 main: com.github.Gamecube762.BAH.Main
 author: Gamecube762
-version: 1.3
+version: 1.4
 prefix: BAH
 commands:
    BringAllHere:
