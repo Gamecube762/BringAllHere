@@ -10,7 +10,7 @@ commands:
       permission: bah.command.bringallhere
    BringAllTo:
       description: Teleports everyone to who you choose.
-      usage: /<command> [player]
+      usage: /<command> [player]  or  /<command> [X Y Z World]
       permission: bah.command.bringallto
    BringMeBack:
       description: Teleports you to where you once were.
