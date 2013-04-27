@@ -6,6 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.CommandBlock;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,8 +36,8 @@ public class Main extends JavaPlugin{
 		int PlayersOnline = Bukkit.getServer().getOnlinePlayers().length;
 		boolean sIsPlayer = isSenderPlayer(sender);
 		boolean sHasPerm = hasPermission(sender, cmdPerm);
-		Player s = Bukkit.getServer().getPlayer(sender.getName());
 		
+		Player s = Bukkit.getServer().getPlayer(sender.getName());
 		Location sLoc = sLocation(s); //gets their location, returns null if not player
 			
 		
@@ -64,11 +67,9 @@ public class Main extends JavaPlugin{
 				
 				Player Target = Bukkit.getServer().getPlayer(args[0]);
 				
-				
-				
 				if (isDouble(args[0])|isInteger(args[0])) {
 					
-					if (!(sender instanceof Player)) {sender.sendMessage(ChatColor.RED + "Sorry, haft to be in game for this to work! Will be fixed later!");}
+					if (!sIsPlayer) {sender.sendMessage(ChatColor.RED + "Sorry, haft to be in game for this to work! Will be fixed later!");}
 					
 					if (args.length < 1) {sender.sendMessage(ChatColor.RED + "No argument for X"); return false;}
 					if (!isInteger(args[0])|!isDouble(args[0])) {sender.sendMessage(ChatColor.RED + "Bad argument for x"); return false;}
@@ -76,30 +77,50 @@ public class Main extends JavaPlugin{
 					if (!isInteger(args[1])|!isDouble(args[1])) {sender.sendMessage(ChatColor.RED + "Bad argument for Y"); return false;}
 					if (args.length < 3) {sender.sendMessage(ChatColor.RED + "No argument for Z"); return false;}
 					if (!isInteger(args[2])|!isDouble(args[2])) {sender.sendMessage(ChatColor.RED + "Bad argument for Z"); return false;}
-					//if (args.length < 4) {sender.sendMessage(ChatColor.RED + "No argument for World"); return false;}
+					
+					String world = null;
+					if (args.length < 4) {world = " ";} else {world = args[3];}
 					
 					
+					if (!sIsPlayer) {
 					
-					double x = Double.parseDouble(args[0]);
-					double y = Double.parseDouble(args[1]);
-					double z = Double.parseDouble(args[2]);
-					Location tLoc = new Location(s.getWorld(), x, y, z);
-					/*
-					World world = getCmdWorld(sender, args[3]); if (world==null) {sender.sendMessage(ChatColor.RED + "Error: Cant Get World!");return true;}
-					tLoc.setWorld(world);
-					tLoc.setX(x);
-					tLoc.setY(y);
-					tLoc.setZ(z); */
-				
-					for(Player p: Bukkit.getServer().getOnlinePlayers()){
-						if(!(p.hasPermission("bah.teleport.exempt"))){
-							BeforeMassTele.put(p, p.getLocation());
-							p.teleport(tLoc);
-							p.sendMessage(ChatColor.GOLD+"Teleported everyone to " + tLoc.toString());}
+						World w = getCmdWorld(sender, world);
+						if (w==null) {return false;}
+						double x = Double.parseDouble(args[0]);
+						double y = Double.parseDouble(args[1]);
+						double z = Double.parseDouble(args[2]);
+						Location tLoc = new Location(w, x, y, z);
+						getLogger().info(tLoc.toString());
+						
+						for(Player p: Bukkit.getServer().getOnlinePlayers()){
+							if(!(p.hasPermission("bah.teleport.exempt"))){
+								BeforeMassTele.put(p, p.getLocation());
+								p.teleport(tLoc);
+								p.sendMessage(ChatColor.GOLD+"Teleported everyone to " + tLoc.toString());}
+						}
+						sender.sendMessage(ChatColor.GOLD + "Teleported everyone to " + tLoc.toString() + "!");
+						if (sIsPlayer) {getLogger().info(s.getName() + " teleported all to " +  tLoc.toString());}
+						return true;
+					
+					} else if (sIsPlayer) {
+						World w = getCmdWorld(sender, world);if (w==null) {return false;}
+						double x = Double.parseDouble(args[0]);
+						double y = Double.parseDouble(args[1]);
+						double z = Double.parseDouble(args[2]);
+						Location tLoc = new Location(w, x, y, z);
+					
+						for(Player p: Bukkit.getServer().getOnlinePlayers()){
+							if(!(p.hasPermission("bah.teleport.exempt"))){
+								BeforeMassTele.put(p, p.getLocation());
+								p.teleport(tLoc);
+								p.sendMessage(ChatColor.GOLD+"Teleported everyone to " + tLoc.toString());}
+						}
+						sender.sendMessage(ChatColor.GOLD + "Teleported everyone to " + tLoc.toString() + "!");
+						if (sIsPlayer) {getLogger().info(s.getName() + " teleported all to " +  tLoc.toString());}
+						return true;
 					}
-					sender.sendMessage(ChatColor.GOLD + "Teleported everyone to " + tLoc.toString() + "!");
-					if (sIsPlayer) {getLogger().info(s.getName() + " teleported all to " +  tLoc.toString());}
 					return true;
+					
 				} else if (Target != null) {
 					Location tLoc = Target.getLocation();
 					
@@ -147,17 +168,11 @@ public class Main extends JavaPlugin{
 	}
 
 	public boolean isSenderPlayer(CommandSender sender) {if (sender instanceof Player) {return true;} else {return false;}}
+	public boolean isCmdBlock(CommandSender sender) {if (sender instanceof CommandBlock) {return true;} else {return false;}}
+	public Block returnCBBlock(BlockCommandSender sender) {if (sender instanceof CommandBlock) {return sender.getBlock();} else {return null;}}
 	public boolean hasPermission(CommandSender sender, String cmdPerm) {if (!isSenderPlayer(sender)){return true;}else{return sender.hasPermission(cmdPerm);}}
 	public Location sLocation(Player Sender) {if (isSenderPlayer(Sender)){return Sender.getLocation();}else{return null;}}
 	public boolean isInteger(String s) {try {Integer.parseInt(s);} catch (NumberFormatException e) {return false;}return true;}
 	public boolean isDouble(String s) {try {Double.parseDouble(s);} catch (NumberFormatException e) {return false;}return true;}
-	public World getCmdWorld(CommandSender sender, String args) {
-		World world = Bukkit.getServer().getWorld(args);
-		
-		if (world==null) {
-			world = Bukkit.getServer().getPlayer(sender.getName()).getLocation().getWorld();
-			return world;
-		}
-		return world;
-	}
+	public World getCmdWorld(CommandSender sender, String args) {if (args==" ") {if (sender instanceof Player) {return Bukkit.getServer().getPlayer(sender.getName()).getLocation().getWorld();} else {sender.sendMessage(ChatColor.RED + "Needs World Argument!");return null;}}World world = Bukkit.getServer().getWorld(args);if (world==null) {sender.sendMessage(ChatColor.RED + "unknown World!");return null;}return world;}
 }
