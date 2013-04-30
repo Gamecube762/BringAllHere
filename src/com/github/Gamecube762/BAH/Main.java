@@ -48,7 +48,7 @@ public class Main extends JavaPlugin{
 			if (PlayersOnline <= 1){s.sendMessage(ChatColor.RED + "No one is online to teleport to you ='(");return true;}
 				
 				for(Player p: Bukkit.getServer().getOnlinePlayers()){
-					if (!(p.hasPermission("bah.teleport.exempt")))
+					if (!(p.hasPermission("bah.teleport.exempt"))|p.getName().equals(s.getName()))
 						BeforeMassTele.put(p, p.getLocation());
 						p.teleport(sLoc);
 						p.sendMessage(ChatColor.GOLD + "Teleported all to " + s.getName());
@@ -96,9 +96,8 @@ public class Main extends JavaPlugin{
 							if(!(p.hasPermission("bah.teleport.exempt"))){
 								BeforeMassTele.put(p, p.getLocation());
 								p.teleport(tLoc);
-								p.sendMessage(ChatColor.GOLD+"Teleported everyone to " + tLoc.toString());}
+								p.sendMessage(ChatColor.GOLD+"Teleported everyone to " + tLoc.toString() + "!");}
 						}
-						sender.sendMessage(ChatColor.GOLD + "Teleported everyone to " + tLoc.toString() + "!");
 						if (sIsPlayer) {getLogger().info(s.getName() + " teleported all to " +  tLoc.toString());}
 						return true;
 					
@@ -115,7 +114,6 @@ public class Main extends JavaPlugin{
 								p.teleport(tLoc);
 								p.sendMessage(ChatColor.GOLD+"Teleported everyone to " + tLoc.toString());}
 						}
-						sender.sendMessage(ChatColor.GOLD + "Teleported everyone to " + tLoc.toString() + "!");
 						if (sIsPlayer) {getLogger().info(s.getName() + " teleported all to " +  tLoc.toString());}
 						return true;
 					}
@@ -125,7 +123,7 @@ public class Main extends JavaPlugin{
 					Location tLoc = Target.getLocation();
 					
 					for(Player p: Bukkit.getServer().getOnlinePlayers()){
-						if(!(p.hasPermission("bah.teleport.exempt"))){
+						if(!(p.hasPermission("bah.teleport.exempt"))|p.getName().equals(Target.getName())){
 							BeforeMassTele.put(p, p.getLocation());
 							p.teleport(tLoc);
 							p.sendMessage(ChatColor.GOLD+"Teleported everyone to "+Target.getName());}
