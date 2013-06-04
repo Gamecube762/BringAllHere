@@ -1,7 +1,7 @@
 name: BringAllHere
 main: com.github.Gamecube762.BAH.Main
 author: Gamecube762
-version: 1.4
+version: 1.5
 prefix: BAH
 commands:
    BringAllHere:
@@ -12,6 +12,10 @@ commands:
       description: Teleports everyone to a Player or a Location
       usage: /<command> [player]  or  /<command> [X Y Z World]
       permission: bah.command.bringallto
+   BringWorldHere:
+      description: Teleports everyone in the world to the command sender
+      usage: /<command> [world]
+      permission: bah.command.bringworldhere
    BringMeBack:
       description: Teleports you to where you once were.
       usage: /<command>
@@ -33,11 +37,15 @@ permissions:
          bah.command.bringallto: true
          bah.command.puteveryoneback: true
          bah.command.bringmeback: true
+         bah.command.bringworldhere: true
    bah.command.bringallhere:
       description: Access to the BringAllHere command
       default: OP
    bah.command.bringallto:
       description: Access to the BringAllTo command
+      default: OP
+   bah.command.bringworldhere:
+      description: Access to the BringWorldHere command
       default: OP
    bah.command.bringmeback:
       description: Access to the BringMeback command
