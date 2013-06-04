@@ -136,7 +136,33 @@ public class Main extends JavaPlugin{
 				} else {sender.sendMessage(ChatColor.RED + args[0] + " was not found");return true;}
 				
 				
-				
+		} else if (cmdName.equalsIgnoreCase("bringworldhere")|cmdName.equalsIgnoreCase("bwh")) {
+			if (!sIsPlayer) {sender.sendMessage(ChatColor.RED + "You haft to be a player to run this command! Try " + ChatColor.YELLOW + "PutEveryoneBack" + ChatColor.RED + "or" + ChatColor.YELLOW + "PutAllBack");return true;}
+			if (!sHasPerm) {s.sendMessage(ChatColor.RED + "You don't have permission!");return true;}
+			
+			if (PlayersOnline <= 1){s.sendMessage(ChatColor.RED + "No one is online to teleport to you ='(");return true;}
+			
+			World from = sLoc.getWorld();
+			
+
+			
+			if (args.length > 0) {
+				from = getCmdWorld(sender, args[0]);
+					if (from==null) {return false;}
+			}
+			
+			//add check if world is empty
+			
+			for (Player p: Bukkit.getServer().getOnlinePlayers()) {
+				if (!(p.hasPermission("bah.teleport.exempt"))|p.getName().equals(s.getName())) {
+					if (p.getWorld()==from){
+						p.teleport(sLoc);
+						p.sendMessage(ChatColor.GOLD + "Teleported everyone in world '"+from.getName()+"' to " +s.getName());
+					}
+				}
+			}
+			s.sendMessage(ChatColor.GOLD + "Teleported everyone in world '"+from.getName()+"' to You!");
+			
 
 		} else if (cmdName.equalsIgnoreCase("bringmeback")|cmdName.equalsIgnoreCase("bab")) {
 			if (!sIsPlayer) {sender.sendMessage(ChatColor.RED + "You haft to be a player to run this command! Try " + ChatColor.YELLOW + "PutEveryoneBack" + ChatColor.RED + "or" + ChatColor.YELLOW + "PutAllBack");return true;}
