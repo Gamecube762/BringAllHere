@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.github.Gamecube762.BAH.Command.BringAllHere;
 import com.github.Gamecube762.BAH.Command.BringAllTo;
+import com.github.Gamecube762.BAH.Command.*;
 
 public class CommandHandler implements CommandExecutor {
 	
@@ -32,9 +33,11 @@ public class CommandHandler implements CommandExecutor {
 
 		if (!hasPerm) {sender.sendMessage(ChatColor.RED + "You don't have permission!");return true;}
 		
-		if (cmdName.equalsIgnoreCase("BringAllHere")) {return BringAllHere.run(sender, isPlayer, args, this.log);}else
+		if (cmdName.equalsIgnoreCase("BringAllHere")) {return BringAllHere.run(sender, isPlayer, args, this.log);}
 		if (cmdName.equalsIgnoreCase("BringAllTo")) {return BringAllTo.run(sender, isPlayer, args, this.log);}
+		if (cmdName.equalsIgnoreCase("BringWorldHere")) {return BringWorldHere.run(sender, isPlayer, args, this.log);}
+		if (cmdName.equalsIgnoreCase("BringWorldTo")) {return BringWorldTo.run(sender, isPlayer, args, this.log);}
 		
-		return false;
+		return true;
 	}
 }

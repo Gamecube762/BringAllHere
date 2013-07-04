@@ -4,6 +4,7 @@ author: Gamecube762
 version: 1.5
 prefix: BAH
 commands:
+#bring commands
    BringAllHere:
       description: Teleports everyone to you.
       usage: /<command>
@@ -16,6 +17,11 @@ commands:
       description: Teleports everyone in the world to the command sender
       usage: /<command> [world]
       permission: bah.command.bringworldhere
+   BringWorldTo:
+      description: Teleports everyone in the world to Player or a Location
+      usage: /<command> [world]
+      permission: bah.command.bringworldto
+#return commands
    BringMeBack:
       description: Teleports you to where you once were.
       usage: /<command>
@@ -28,6 +34,7 @@ commands:
       description: Teleports everyone to where they once were.
       usage: /<command>
       permission: bah.command.puteveryoneback
+
 permissions:
    bah.command.*:
       description: Access to all BringAllHere commands
@@ -38,6 +45,7 @@ permissions:
          bah.command.puteveryoneback: true
          bah.command.bringmeback: true
          bah.command.bringworldhere: true
+         bah.command.bringworldto: true
    bah.command.bringallhere:
       description: Access to the BringAllHere command
       default: OP
@@ -46,6 +54,9 @@ permissions:
       default: OP
    bah.command.bringworldhere:
       description: Access to the BringWorldHere command
+      default: OP
+   bah.command.bringworldto:
+      description: Access to the BringWorldTo command
       default: OP
    bah.command.bringmeback:
       description: Access to the BringMeback command

@@ -15,6 +15,8 @@ public class Main extends JavaPlugin{
 		this.log = this.getLogger();
 		getCommand("bringallhere").setExecutor(new CommandHandler(this));
 		getCommand("bringallto").setExecutor(new CommandHandler(this));
+		getCommand("bringworldhere").setExecutor(new CommandHandler(this));
+		getCommand("bringworldto").setExecutor(new CommandHandler(this));
 	}
 	
 	@Override
